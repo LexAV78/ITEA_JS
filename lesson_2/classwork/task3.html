@@ -12,12 +12,12 @@
     <button class="popup__button" id="popup_3" data-popup="3"> Show popup 3</button>
   </div>
 
-  <div class="popup show" id="popup">
+  <div class="popup" id="popup">
 
     <div class="popup__body">
       <button class="popup__close" id="popup__close">Close popup</button>
       <div class="popup__container" id="popup__container">
-        <div class="popup__item show" data-popup="1"><h2>I'm first popup</h2></div>
+        <div class="popup__item" data-popup="1"><h2>I'm first popup</h2></div>
         <div class="popup__item" data-popup="2"><h2>I'm second popup</h2></div>
         <div class="popup__item" data-popup="3"><h2>I'm third popup</h2></div>
       </div>
@@ -25,22 +25,29 @@
   </div>
 
   <script>
-    var elPopup__close = document.getElementById('popup__close');
+    
     var elPopup = document.getElementById('popup');
-    elPopup__close.onclick = function(){
-      elPopup.classList.remove("show");
+    //
+    var elPopup__close = document.getElementById('popup__close');
+    elPopup__close.onclick = function(){elPopup.classList.remove("show");};
+    //
+    function fnShowDelAll(){
+      var vMas=document.querySelectorAll(".popup__item");
+      vMas.forEach(vItem=>vItem.classList.remove("show"));
+      return vMas;
     };
-    function vShow(vI){
-      var masPop=document.querySelectorAll("popup__item");
-      for(var i=0;i<masPop.length;i++)
-        {
-          masPop[i].
-        }
-    }
-    var elPopup1 = document.getElementById('popup_1');
-    elPopup1.onclick = function(){
-      elPopup.classList.remove("show");
+    function fnShow(vID){
+      fnShowDelAll().forEach(vItem=>{if(vItem.getAttribute("data-popup")==vID)vItem.classList.add("show")});
+      elPopup.classList.add("show");
     };
+    function fnBtnClick(vEvent){
+      fnShow(vEvent.target.getAttribute("data-popup"));
+    };
+    function fnBindBtnClick(){
+      var vMas=document.querySelectorAll(".popup__button");
+      vMas.forEach(vItem=>vItem.onclick=fnBtnClick);
+    };
+    fnBindBtnClick();
     /*
 
       Задача: Сделать корректно работающее всплывающее окно.

@@ -1,4 +1,20 @@
 
+  function fnImageDisable(){
+    var vMas=document.querySelectorAll(".tab");
+    vMas.forEach(vItem=>vItem.classList.remove("active"));
+    return vMas;
+  };
+  function fnImageShow(vID){
+    fnImageDisable().forEach(vItem=>{if(vItem.getAttribute("data-tab")==vID)vItem.classList.add("active")});
+  };
+  function fnBtnClick(vItem){
+   fnImageShow(vItem.target.getAttribute("data-tab"));
+  };
+  function fnBindBtnClick(){
+    var vMas=document.querySelectorAll(".showButton");
+    vMas.forEach(vItem=>vItem.onclick=fnBtnClick);
+  };
+  fnBindBtnClick();
   /*
 
     Задание 1.
