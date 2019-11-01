@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 3</title>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="wrap" id="wrap">
+      <h1>Переключение слайдера</h1>
+      <div class="roadMap__container yellow">
+        <button class="navButton" data-direction="<"> Prev </button>
+        <div class="roadMap">
+          <div class="roadMapPoint" data-id="1"></div>
+          <div class="roadMapPoint ball" data-id="2"></div>
+          <div class="roadMapPoint" data-id="3"></div>
+          <div class="roadMapPoint" data-id="4"></div>
+          <div class="roadMapPoint" data-id="5"></div>
+          <div class="roadMapPoint" data-id="6"></div>
+          <div class="roadMapPoint" data-id="7"></div>
+          <div class="roadMapPoint" data-id="8"></div>
+        </div>
+        <button class="navButton" data-direction=">"> Next </button>
+      </div>
+
+      <div class="roadMap__container red">
+        <button class="navButton" data-direction="<"> Prev </button>
+        <div class="roadMap">
+          <div class="roadMapPoint" data-id="1"></div>
+          <div class="roadMapPoint" data-id="2"></div>
+          <div class="roadMapPoint ball" data-id="3"></div>
+          <div class="roadMapPoint" data-id="4"></div>
+        </div>
+        <button class="navButton" data-direction=">"> Next </button>
+      </div>
+
+      <div class="roadMap__container blue">
+        <button class="navButton" data-direction="<"> Prev </button>
+        <div class="roadMap">
+          <div class="roadMapPoint" data-id="1"></div>
+          <div class="roadMapPoint ball" data-id="2"></div>
+          <div class="roadMapPoint" data-id="3"></div>
+          <div class="roadMapPoint" data-id="4"></div>
+        </div>
+        <button class="navButton" data-direction=">"> Next </button>
+      </div>
+
+
+      <div class="roadMap__container red">
+          <button class="navButton" data-direction="<"> Prev </button>
+          <div class="roadMap">
+            <div class="roadMapPoint" data-id="1"></div>
+            <div class="roadMapPoint" data-id="2"></div>
+            <div class="roadMapPoint ball" data-id="3"></div>
+            <div class="roadMapPoint" data-id="4"></div>
+          </div>
+          <button class="navButton" data-direction=">"> Next </button>
+        </div>
+  
+        <div class="roadMap__container blue">
+          <button class="navButton" data-direction="<"> Prev </button>
+          <div class="roadMap">
+            <div class="roadMapPoint" data-id="1"></div>
+            <div class="roadMapPoint ball" data-id="2"></div>
+            <div class="roadMapPoint" data-id="3"></div>
+            <div class="roadMapPoint" data-id="4"></div>
+          </div>
+          <button class="navButton" data-direction=">"> Next </button>
+        </div>
+
+    </div>
+    <script>
+
+      /*
+        Задание:
+
+        Написать скрипт, который будет приводить в действие переключалки из разметки.
+        И будет перемещать класс ball по точкам в зависимости от нажатой кнопки
+
+      */
+
+      /*var containers = document.querySelectorAll('.roadMap__container');
+          containers.forEach( function( container ){
+            console.log( container );
+            var ball = container.querySelector('.ball');
+            console.log( ball.dataset.id );
+          })*/
+      function setBallNew(vItem,vPosNew,vPosOld){
+        var vRoadMap=vItem.querySelectorAll('.roadMapPoint');
+        var vBallCount =vRoadMap.length; 
+        if((vPosNew>0)&&(vPosNew<=vBallCount)&&(vPosNew!=vPosOld)) 
+        vRoadMap.forEach(vIt=>{
+          if(vIt.getAttribute("data-id")==vPosOld)vIt.classList.remove("ball");else
+          if(vIt.getAttribute("data-id")==vPosNew)vIt.classList.add("ball");
+        });  
+      };
+      ///////////////////
+      function fnBtnClick(vItem){
+        var vParentNode=vItem.target.parentNode;
+        var vBallPosition = vParentNode.querySelector('.ball').getAttribute("data-id");
+        var vNewBallPosition=vBallPosition;
+        if(vItem.target.getAttribute("data-direction")=="<")
+          vNewBallPosition--;
+        else
+          vNewvBallPosition++;
+        setBallNew(vParentNode,vNewBallPosition,vBallPosition); 
+      };
+      var btnNav = document.querySelectorAll(".navButton");
+      btnNav.forEach(vItem=>vItem.onclick=fnBtnClick);
+      ///////////////////
+      function fnBallClick(vItem){
+        var vNewBallPosition=vItem.target.getAttribute("data-id");
+        var vParentNode=vItem.target.parentNode.parentNode;
+        var vBallPosition = vParentNode.querySelector('.ball').getAttribute("data-id");
+        setBallNew(vParentNode,vNewBallPosition,vBallPosition);
+      };
+      var ballMap = document.querySelectorAll(".roadMapPoint");
+      ballMap.forEach(vItem=>vItem.onclick=fnBallClick);
+    </script>
+  </body>
+
+</html>
