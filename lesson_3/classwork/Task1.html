@@ -84,6 +84,7 @@
               {
               var elLi = document.createElement("li");   // 
               elLi.innerHTML = "<button>"+"-"+"</button>  "+elText.value;  // 
+              elLi.querySelector("button").style.borderRadius="5px";
               elList.appendChild(elLi);  
               elLi.addEventListener("click",tbBtnMinus);
               ListCount++;
