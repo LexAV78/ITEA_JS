@@ -91,6 +91,7 @@
               var elLi = document.createElement("li");   // 
               elLi.innerHTML = "<button>"+"-"+"</button>  "+elText.value;  // 
               elLi.querySelector("button").style.borderRadius="5px";
+              elLi.setAttribute("style", "list-style: none;");
               elList.appendChild(elLi);  
               elLi.querySelector("button").addEventListener("click",tbBtnMinus);
               ListCount++;
