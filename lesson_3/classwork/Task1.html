@@ -56,6 +56,14 @@
       var elList = document.getElementById("list");
       var elBtnAdd = document.getElementById("AddToList");
       var elText = document.getElementById("Receiver");
+      function statusBtnAdd(){
+        if(ListCount>4)elBtnAdd.setAttribute("disabled", "disabled"); else elBtnAdd.removeAttribute("disabled");
+      }
+      function tbBtnMinus(vItem){
+        vItem.target.parentNode.remove();
+        ListCount--;
+        statusBtnAdd();
+      };
       function fnBtnAddClick(){
         
         if(ListCount<5){
@@ -64,16 +72,16 @@
           if(vLength>0)
               {
               var elLi = document.createElement("li");   // 
-              elLi.innerHTML = elText.value;  // 
+              elLi.innerHTML = "<button>"+"-"+"</button>"+elText.value;  // 
               elList.appendChild(elLi);  
+              elLi.addEventListener("click",tbBtnMinus);
               elText.value="";
               ListCount++;
               elBtnAdd.setf
               }
               
         };
-        if(ListCount>4)elBtnAdd.setAttribute("disabled", "disabled"); 
-
+        statusBtnAdd();
         console.log(ListCount);
         
       }
