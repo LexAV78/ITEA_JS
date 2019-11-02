@@ -58,7 +58,15 @@
       var elText = document.getElementById("Receiver");
       elText.setAttribute("autofocus","");
       function statusBtnAdd(){
-        if(ListCount>4)elBtnAdd.setAttribute("disabled", "disabled"); else elBtnAdd.removeAttribute("disabled");
+        if(ListCount>4)
+          {
+            elBtnAdd.setAttribute("disabled", "true");
+            elText.setAttribute("disabled", "true");
+          } else 
+          {
+            elBtnAdd.removeAttribute("disabled");
+            elText.removeAttribute("disabled");
+          }
         elText.value="";
         elText.focus();
       }
@@ -87,7 +95,7 @@
       function fnTextENTER(vEvent){
         if(vEvent.code=="Enter")fnBtnAddClick();
       }
-      elText.addEventListener("keydown",fnTextENTER);
+      elText.addEventListener("keypress",fnTextENTER);
       elBtnAdd.addEventListener("click",fnBtnAddClick);
 
     </script>
