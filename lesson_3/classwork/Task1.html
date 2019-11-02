@@ -59,6 +59,8 @@
       elText.setAttribute("autofocus","");
       function statusBtnAdd(){
         if(ListCount>4)elBtnAdd.setAttribute("disabled", "disabled"); else elBtnAdd.removeAttribute("disabled");
+        elText.value="";
+        elText.focus();
       }
       function tbBtnMinus(vItem){
         vItem.target.parentNode.remove();
@@ -76,7 +78,6 @@
               elLi.innerHTML = "<button>"+"-"+"</button>  "+elText.value;  // 
               elList.appendChild(elLi);  
               elLi.addEventListener("click",tbBtnMinus);
-              elText.value="";
               ListCount++;
               }
               
