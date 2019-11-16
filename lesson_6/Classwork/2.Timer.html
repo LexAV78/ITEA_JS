@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Homework</title>
+</head>
+<body>
+  <div class="divOsn">
+    <div id="idDivProgress">
+      <label id="txtProgr"> </label>
+      <div id="idProgress"></div>
+    </div>
+    <div>
+      <label for="idRevers">
+        Revers
+        <input type="checkbox" name="elRev" id="idRevers">
+      </label>
+    </div>
+    <div id="divBtn">
+      <input type="number" value="30" id="idNumTimer">
+      <input type="button" value="Start" id="idBtnStartStop">
+      <!-- <input type="button" value="elBtn2" id="idBtn2"> -->
+    </div>
+  </div>
+      <!--       
+        Создайте счетчик секунд, который начинает отчет с 1 и заканчивается на 30,
+        также добавьте кнопки который останавливают отчет, и запускают его заново и добавьте кнопку обнуляющую отчет.
+        Также попробуйте изменить код так чтобы отчет начиналься с 30 и заканчивалься на 1.
+
+       + бонус: Сделать так что бы на каждый тик (1с/2c) менялся цвет фона. Можно на основе генератора случайного цвета с предудущих уроков.
+       + бонус: Сделать визуализацию стрелки которая идет по кругу
+            document.getElementById("myDIV").style.transform = "rotate(7deg)";
+
+       + бонус: Сделать кнопки которые выбирают режим в котором идет отсчет - обычный от 0 до 30 или реверсивный от 30 до 0
+      -->
+      <script>
+        window.addEventListener("load", function () {
+          //            variable element
+          const elBtnStartStop = document.getElementById("idBtnStartStop");
+          const elInterval = document.getElementById("idNumTimer");
+          const elChecked = document.getElementById("idRevers");
+          const elProgress = document.getElementById("idProgress");
+          const elTxtProgr = document.getElementById("txtProgr");
+          const elDivProgress = document.getElementById("idDivProgress");
+          //            object
+          var objTimerFn = { 
+            //fn
+            intervalStartParam : function() {
+              let maxTimer = elInterval.value;
+              let reverse = elChecked.checked;
+              this.maxWidth = maxTimer;
+              if(this.bInterval)this.intervalClear();
+              this.bProgress = true;
+              this.bReverse = reverse;
+              if(reverse){
+                this.maxTimer = 1;
+                this.iPosition = maxTimer++;
+              }else{
+                this.maxTimer = maxTimer;
+                this.iPosition = 0;
+              }
+            },
+            //fn
+            intervalClear : function() {
+              clearInterval(this.interv);
+              this.bInterval = false;
+              elBtnStartStop.value = "Start";
+              if(this.maxTimer==this.iPosition){
+                this.bProgress = false;
+                elInterval.disabled = this.bProgress;
+                elChecked.disabled = this.bProgress;
+                elTxtProgr.innerText = "";
+                elProgress.style.width = "0%";
+                elDivProgress.style.display = "none";
+              }
+            },
+            //fn
+            intervalStartStop : function (){
+              let vThis = this;
+              if(vThis.bInterval){
+                vThis.bInterval = false;
+                elBtnStartStop.value = "Start";
+              }
+              else{
+                vThis.bInterval = true;
+                elBtnStartStop.value = "Stop";
+                let fnInterval = function(){
+                  if(vThis.bReverse) vThis.iPosition--; else vThis.iPosition++;
+                  elTxtProgr.innerText = vThis.iPosition;
+                  elProgress.style.width =   vThis.iPosition/(vThis.maxWidth/100)+"%";
+                  if((vThis.maxTimer==vThis.iPosition)||(vThis.bInterval==false)){
+                    vThis.intervalClear();
+                  };
+                };
+                this.interv = setInterval(fnInterval,1000);
+              }
+              elInterval.disabled = vThis.bInterval;
+              elChecked.disabled = vThis.bInterval;
+            }
+          };
+          //            object
+          var objTimer ={
+              bProgress : false,
+              bInterval : false,
+              interv : {},
+              bReverse : false,
+              maxTimer : 10,
+              maxWidth : 0,
+              iPosition : 0
+          };
+          //            Prototype
+          Object.setPrototypeOf( objTimer, objTimerFn );
+          //
+          const objTimer1 = objTimer;
+          //            function
+          const fnStartStop = () => {
+            if(objTimer1.bProgress==false)
+              objTimer1.intervalStartParam();
+            elDivProgress.style.display = "block";
+            objTimer1.intervalStartStop();
+          };
+          //            event
+          elBtnStartStop.addEventListener("click",fnStartStop);
+          elInterval.addEventListener("change",() => {objTimer1.bProgress=false});
+          elChecked.addEventListener("change",() => {objTimer1.bProgress=false});
+         });
+      </script>
+      <style>
+          #idDivProgress {
+            width: 100%;
+            background-color: rgb(211, 204, 204);
+            display: none;
+          }
+          
+          #idProgress {
+            width: 0%;
+            height: 20px;
+            background-color: rgb(76, 135, 175);
+          }
+          #txtProgr{
+            width: 100%;
+            text-align: center;
+            position: absolute;
+          }
+      </style>
+</body>
+</html>

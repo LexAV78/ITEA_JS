@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Classwork</title>
+
+    <script>
+
+    /*
+      Задание:
+      1. При помощи методов изложеных ниже, переформатировать ITEA_COURSES в массив который содержит длину строк каждого из элементов.
+      2. Отфильтровать массив ITEA_COURSES по алфавиту.
+          + Бонусный бал. Вывести на страничку списком
+      3. Реализация функции поиска по массиву ITEA_COURSES.
+          + Бонусный бал. Вывести на страничку инпут и кнопку по которой будет срабатывать поиск.
+    */
+    window.addEventListener("load",() => {
+      const ITEA_COURSES = ["Курс HTML & CSS", "JavaScript базовый курс", "JavaScript продвинутый курс", "JavaScript Professional", "Angular 2.4 (базовый)", "Angular 2.4 (продвинутый)", "React.js", "React Native", "Node.js", "Vue.js"];
+      elMasOrig = document.getElementById("idMasOrig");
+      elMasLength = document.getElementById("idMasLength");
+      elMasSort = document.getElementById("idMasSort");
+      elMasFiler = document.getElementById("idDivFilter");
+      
+      
+
+      fmCreateTableMas = (mas,event) => {
+        let elTable  = document.createElement('table');
+        elTable.style.width = "100%";
+        elTable.setAttribute('border', '1');
+        let elTableBody = document.createElement('TBODY');
+        elTable.appendChild(elTableBody);
+        mas.map((nm,key) => {
+          let vStr = "";
+          let elRow = document.createElement("tr");
+          elTableBody.appendChild(elRow);
+          let vRow = document.createElement("td");
+          let vText = document.createTextNode(key);
+          vRow.appendChild(vText);
+          elRow.appendChild(vRow);
+          vRow = document.createElement("td");
+          if(typeof (nm)=="object"){
+            vStr = "'"+ nm.name+"' ("+nm.duration+" мин.)"+" Актёры : "+nm.starring.join();
+          }else vStr = nm;
+          vText = document.createTextNode(vStr);
+          vRow.appendChild(vText);
+          elRow.appendChild(vRow);
+        });
+        event.appendChild(elTable);
+      }
+      //    Оригинал
+      elMasOrig.innerText = "Оригинал : "
+      fmCreateTableMas(ITEA_COURSES,elMasOrig);
+      // 
+      ITEA_COURSES.map((nm,key) => {
+        ITEA_COURSES[key] = nm+" (Length : "+nm.length+")";
+      });
+      //    Length
+      elMasLength.innerText = "Length : ";
+      fmCreateTableMas(ITEA_COURSES,elMasLength);
+      //    Sort
+      elMasSort.innerText = "Sort : ";
+      fmCreateTableMas(ITEA_COURSES.sort(),elMasSort);
+      //    Filter
+      const masFilter = (strFilter,mas) => {
+        return mas.filter(data => {
+          return data.toLowerCase().indexOf(strFilter.toLowerCase()) > -1;
+        });
+      };
+      fmCreateTableMas(ITEA_COURSES,elMasFiler);
+      document.getElementById("idFilter").addEventListener("keyup",event => {
+        let vStr = event.target.value.trim();
+        elMasFiler.innerHTML = "";
+        if(vStr)
+          fmCreateTableMas(masFilter(event.target.value,ITEA_COURSES),elMasFiler);
+          else
+          fmCreateTableMas(ITEA_COURSES,elMasFiler);
+      });
+      //
+    /*
+      Задание 2:
+      Написать фильтр массива по:
+      Актеру, продолжительности
+
+      Бонус:
+        Сделать графическую оболочку для программы:
+        - Селект со списком актеров
+        - Селект или инпут с продолжительностью
+        - Результат в виде списка фильмов
+    */
+      //      variable Element
+      elDivFilter = document.getElementById("idDivStarsSel");
+      elDivStars = document.getElementById("idDivStars");
+      elNumStar = document.getElementById("idNumStar");
+      //       Array
+      var stars = ['Elijah Wood', 'Ian McKellen', 'Orlando Bloom','Ewan McGregor',' Liam Neeson', 'Natalie Portman', 'Ewan McGregor', 'Billy Bob Thornton', 'Martin Freeman']
+      var movies = [
+            {
+              name: "Lord of the Rigs",
+              duration: 240,
+              starring: [ 'Elijah Wood', 'Ian McKellen', 'Orlando Bloom']
+            },
+            {
+              name: "Star Wars: Episode I - The Phantom Menace",
+              duration: 136,
+              starring: [ 'Ewan McGregor',' Liam Neeson', 'Natalie Portman']
+            },
+            {
+              name: "Fargo",
+              duration: 100,
+              starring: [ 'Ewan McGregor', 'Billy Bob Thornton', 'Martin Freeman']
+            },
+            {
+            name: "V for Vendetta",
+            duration: 150,
+            starring: [ 'Hugo Weaving', 'Natalie Portman', 'Rupert Graves']
+          }
+      ];
+      //fn
+      fnSelectCreate = (vMas,vStr,vID) => {
+        let vSelect = document.createElement("select"); 
+        vSelect.style.marginTop = "10px";
+        if(vID)vSelect.id = vID;
+        let vOpt = new Option(vStr,0, true, true);
+        vOpt.disabled = true;
+        vSelect.appendChild(vOpt);
+        vMas.forEach((item,key) => {
+          let vOption;
+          vOption = new Option(item, key+1);
+          vSelect.appendChild(vOption);
+        });
+        return vSelect;
+      };
+      // create Selector
+      const elSelectStar = fnSelectCreate(stars,"Выберете звезду");
+      elDivFilter.appendChild(elSelectStar);
+      
+      fmCreateTableMas(movies,elDivStars);
+      //  fn  Filter
+      const fnFilterStar = () =>{
+        let nameStar = "";
+        let minuteStar = elNumStar.value.trim();
+        if(elSelectStar.selectedIndex>0){
+          nameStar = elSelectStar.options[elSelectStar.selectedIndex].text;
+        };
+        if(minuteStar)
+          minuteStar = Number.parseInt(minuteStar)
+        else 
+          minuteStar = 0;
+        const masFilterStar = movies.filter(e => {
+            
+            if(nameStar) 
+            return (e.duration > minuteStar)&&(e.starring.some(vStr => {
+              return vStr===nameStar;
+            }));
+            else             
+            return e.duration > minuteStar;
+        });
+        elDivStars.innerHTML = "";
+        fmCreateTableMas(masFilterStar,elDivStars);
+      };
+      //             event
+      elSelectStar.addEventListener("change",fnFilterStar);
+      elNumStar.addEventListener("keyup",fnFilterStar);
+      elNumStar.addEventListener("change",fnFilterStar);
+    });       
+    </script>
+</head>
+<body>
+  <h1>Задание №1</h1>
+  <div >
+    <p id="idMasOrig"></p>
+    <p id="idMasLength"></p>
+    <p id="idMasSort"></p>
+    <p id="idMasFiler">
+      <label for="idFilter">Filter :</label>
+      <input type="text" name="txtFilter" id="idFilter">
+      <div id="idDivFilter">
+
+      </div>
+    </p>
+  </div>
+  <h1>Задание №2</h1>
+  <div id="idDivStarsSel" ></div>
+  <label for="idNumStar">
+    Продолжительность фильма более (мин.) :
+    <input type="number" name="numStar" id="idNumStar"value="60">
+  </label>
+  <div id="idDivStars" ></div>
+</body>
+</html>

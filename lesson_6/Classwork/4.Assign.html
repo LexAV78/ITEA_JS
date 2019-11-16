@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Classwork</title>
+
+    <script>
+    /*
+      Задание:
+        1. Используя интерфейс который есть на страничке, написать визуальный
+        конструктор обектов используя значение key-value, которые вводятся в
+        соответствующие поля в форме.
+
+        2. Каждый созданый обьект выводить в тег code после добавления каждого
+        нового поля. Т.е мы должны визуально видить в каком состоянии наши обьекты
+        сейчас
+
+        3. По нажатию кнопки Combine Objects! два обьекта должны обьедениться
+        используя метод Object.assing или spread operator и вывестись на стринчку.
+
+        * Изменять HTML можно.
+
+    */
+    </script>
+</head>
+<body>
+  <div class="wrap">
+      <div class="assigned">
+        <form class="ObjForm">
+            <input name="key" placeholder="Enter your key"/>
+            <input name="value" placeholder="Enter your value"/>
+            <button type="submit">Send</button>
+        </form>
+        <div class="createResult">
+          <header>
+            Created Object
+          </header>
+          <div class="createdObj">
+            <code>
+              {
+                id:123,
+                b:'test',
+                demo:'test2'
+              }
+            </code>
+          </div>
+        </div>
+      </div>
+
+      <div class="assigned">
+        <form class="ObjForm">
+            <input name="key" placeholder="Enter your key"/>
+            <input name="value" placeholder="Enter your value"/>
+            <button type="submit">Send</button>
+          </form>
+          <div class="createResult">
+            <header>
+              Created Object
+            </header>
+            <div class="createdObj">
+              <code>
+                {
+                  id:123,
+                  b:'test',
+                  demo:'test2'
+                }
+              </code>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="resultBlock">
+       <button>Combine Objects!</button>
+      <h3> Result: </h3>
+      <div id="result"></div>
+    </div>
+
+      <script>
+        window.addEventListener("load",() => {
+          // variable
+          const obj1 = {};
+          const obj2 = {};
+          const masCode = [];
+          let glObj = 0;
+          let glIndex = 0;
+          //  function
+          const fnObjViewString = obj => {
+            let strObj = "{";
+            let vZp="";
+            for (var code in obj) {
+                var value = obj[code];
+                if(Number(value))
+                  strObj = strObj+vZp+"\r"+code+" : "+value;
+                  else
+                  strObj = strObj+vZp+"\r"+code+" : '"+value+"'";
+                vZp = ",";
+            }
+            strObj = strObj+"\r}";
+            return strObj;
+          };
+          //
+          const fnViewObj = () => {
+            const elObjCode = masCode[glObj-1];
+            let vObj = {}
+            if(glObj==1)vObj=obj1;else vObj=obj2;
+            elObjCode.innerText = fnObjViewString(vObj);
+          };
+          //
+          const fnAddKeyObj = (key,name) => {
+            if((key.length==0)||(name.length==0))return;
+            if(glObj==1){
+              obj1[key] = name;
+            }else{
+              obj2[key] = name;
+            }
+            fnViewObj();
+          };
+          //
+          const fnSendBtn = event => {
+            event.preventDefault();
+            glObj = Number.parseInt(event.target.getAttribute("Obg"));
+            fnAddKeyObj(event.target.key.value,event.target.value.value);
+
+          };
+          //    event
+          document.querySelectorAll(".ObjForm").forEach(event =>{
+            glIndex++;
+            event.setAttribute("Obg", glIndex);
+            event.addEventListener("submit",fnSendBtn);
+          });
+          document.querySelectorAll("code").forEach(event =>{
+            masCode.push(event);
+          });
+          document.querySelector(".resultBlock>button").addEventListener("click",() => {
+            let obj3={};
+            Object.assign(obj3,obj1,obj2);
+            document.getElementById("result").innerText = fnObjViewString(obj3);
+          });
+          //    go
+          glObj=1;fnViewObj();glObj=2;fnViewObj();
+        });
+      </script>
+      <style>
+        .wrap{
+          width: 800px;
+          display: flex;
+        }
+        .ObjForm,
+        .resultBlock{
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          box-sizing: border-box;
+          padding: 10px 20px;
+        }
+
+        .assigned{
+          width: 300px;
+          display: flex;
+        }
+        .createResult header{
+          font-weight: 700;
+        }
+      </style>
+</body>
+</html>
