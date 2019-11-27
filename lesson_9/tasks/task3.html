@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script src="task_3.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Post</title>
+</head>
+<body>
+
+    <div>
+        <button id = "idSaveStorage">Save to LocalStorage</button>
+        <button id = "idCrearStorage">Crear LocalStorage</button>
+        <button id = "idLoadStorage">Load LocalStorage</button>
+    </div>
+    <div id = "divPost">
+        <div class = "clPost">
+            <span class="clTitle">title</span><span class="clDate">(created_at)</span><br>
+            <span class="clAbout">about</span><br>
+            <span class="clActive">+</span>
+        </div>
+    </div>
+</body>
+<style>
+    div{
+        margin: 5px;
+    }
+    span{
+        margin-left: 5px;
+    }
+    .clPost{
+        background-color: rgb(206, 194, 194);
+    }
+    .clTitle{
+        font-size: 20px;
+        font-weight: bold;
+        color: midnightblue;
+    }
+    .clDate{
+        font-size: 10px;
+    }
+    .clActive{
+        font-size: 12px;
+        font-weight: bold;
+        color: rgb(158, 62, 91);
+    }
+    .clLike:hover{
+        cursor:pointer;
+    }
+</style>
+</html>
