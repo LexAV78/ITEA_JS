@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id = "divTable"></div>
+    <!-- 
+    1. При помощи fetch получить данные:
+     http://www.json-generator.com/api/json/get/cgwbLkTxnS?indent=2
+    2. Полученый ответ преобразовать в json вызвав метод .json с объекта ответа
+    3. На основе данных посторить табличку
+
+    | index | company | email | phone | address |
+
+    4. создать кнопу которая скрывает показывает address
+     -->
+</body>
+<script >
+window.addEventListener("load",() => {
+    //class tableNew
+    class tableNew{
+        constructor(Count,masterDiv){
+            this.Count = Count;
+            this.masterDiv = masterDiv;
+            this.elBodyTable = {};
+            this.masRow = [];
+            this.masBtnHide =[];
+            for(let vI = 0;vI<this.Count;vI++)
+                this.masBtnHide.push(false);
+        }
+        hideColumn(num){
+            num--;
+            if(num<0)num=0;else
+            if(num<this.Count)this.masBtnHide[num] = true;
+        }
+        addHead(...Args){
+            if(Args.length<this.Count)
+                console.log("Создание шапки не возможно. Количество елементов меньше:",this.Count);
+                else{
+                    this.elBodyTable = document.createElement("thead");
+                let strHTML = `<tr>`;
+                for(let vI = 0;vI<this.Count;vI++){
+                    strHTML += `<th>`+Args[vI]+`</th>`;
+                };
+                strHTML += `</tr>`;
+                this.elBodyTable.innerHTML = strHTML;
+            }
+        }
+        addRow(...Args){
+            if(Args.length<this.Count)
+                console.log("Создание строки не возможно. Количество елементов меньше:",this.Count);
+                else{
+                let mRow = [];
+                for(let vI = 0;vI<this.Count;vI++)mRow.push(Args[vI]);
+                this.masRow.push(mRow);
+            }
+        }
+        render(){
+            let elTable  = document.createElement("table");
+             elTable.style.width = "100%";
+             elTable.setAttribute('border', '1');
+            elTable.appendChild(this.elBodyTable);
+            let elBody = document.createElement("TBODY");
+            
+            this.masRow.forEach(item => {
+                let elRow = document.createElement("tr");
+                let i=0;
+                item.forEach(it => {
+                    let vTd = document.createElement("td");
+                    let vSpan = document.createElement("span");
+                    vSpan.innerText = it;
+                    if(this.masBtnHide[i]){
+                        let elBtn = document.createElement("button");
+                        elBtn.innerText = "Показать";
+                        elBtn.style.width = "100%";
+                        vTd.appendChild(elBtn);
+                        vSpan.className = "clHide";
+                        vTd.appendChild(vSpan);
+                        const fnHide = e => {
+                            e.target.parentElement.querySelector(".clHide").className = "";
+                            e.target.className = "clHide";
+                        };
+                        vSpan.addEventListener("click",fnHide);
+                        elBtn.addEventListener("click",fnHide);
+                    }else
+                    vTd.appendChild(vSpan);
+                    elRow.appendChild(vTd);
+                    i++;
+                });
+                elBody.appendChild(elRow);
+            });
+            elTable.appendChild(elBody);
+            this.masterDiv.appendChild(elTable);
+        }
+    }
+    //fn fnCreateTable
+    const fnCreateTable = async (url) => {
+        let prom = await fetch(url);
+        let newJSON = await prom.json();
+        const Table1 = new tableNew(5,document.getElementById("divTable"));
+        Table1.addHead("index","company","email","phone","address","6","7","8","9");
+        Table1.hideColumn(5);
+        newJSON.forEach( item => {
+            Table1.addRow(item.index,item.company,item.email,item.phone,item.address);
+        });
+        Table1.render();
+    };
+    // go
+    fnCreateTable("http://www.json-generator.com/api/json/get/cgwbLkTxnS?indent=2");
+//end
+});
+</script>
+<style>
+.clHide{
+    display: none;
+}
+</style>
+</html>

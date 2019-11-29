@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Forms Task 1</title>
+  <script>
+    /*
+      Задание:
+        Сделать валидацию формы:
+        1. Логин / Пароль не может быть пустым
+        2. то поле, которое не прошло валидацию подсвечивать красным, которое прошло - подсвечивать зеленым.
+        3. Пока не стоит что юзер согласен с лиц. соглашением - кнопка отправки не активна
+    */
+  </script>
+</head>
+<body>
+  <form id="MyValidateForm">
+    <input type="text" name='login' placeholder="Ваш логин" />
+    <input type="password" name='pas1' placeholder="Ваш пароль" />
+    <input type="password" name='pas2' placeholder="Повторите пароль" />
+    <label for="agree">
+      <span>Вы согласны с лицензионым соглашением.</span>
+      <input type="checkbox" id="agree" />
+    </label>
+    <input type="submit" id="submit" value="Отправить" disabled/>
+  </form>
+
+  <style>
+    #MyValidateForm{
+      width: 350px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #MyValidateForm input{
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      padding: 10px 20px;
+    }
+    .error{
+        border: 1px solid red;
+    }
+    .OK{
+        border: 1px solid green;
+    }
+  </style>
+  <script>
+  window.addEventListener("load",() => {
+    //variable
+    let elForm = document.getElementById("MyValidateForm");
+      let elLog = document.querySelector("input[name='login']");
+      let elPas1 = document.querySelector("input[name='pas1']");
+      let elPas2 = document.querySelector("input[name='pas2']");
+      let elChecked = document.querySelector("input[type='checkbox']");
+      let sLog = "";
+      let sPas1 = "";
+      let sPas2 = "";
+      //function
+      fnFormAnaliz = () => {
+        let elBtnSubmit = document.getElementById("submit");
+        let bOK = true;
+
+        if(sLog)
+          elLog.setAttribute("style", "border-color: green;");
+        else{
+          elLog.setAttribute("style", "border-color: red;");
+          bOK = false;
+        };
+        if((sPas1)&&(sPas2)&&(sPas1==sPas2)){
+          elPas1.setAttribute("style", "border-color: green;");        
+          elPas2.setAttribute("style", "border-color: green;");          
+        }else{
+          elPas1.setAttribute("style", "border-color: red;");        
+          elPas2.setAttribute("style", "border-color: red;");    
+          bOK = false;
+        };
+        if((bOK)&&(elChecked.checked))
+          elBtnSubmit.removeAttribute("disabled");
+          else 
+          elBtnSubmit.setAttribute("disabled", "disabled");
+      };
+      //  
+      fnKeyUp = e => {
+        switch(e.target.getAttribute("name")){
+          case "login" : sLog = e.target.value.trim();  break;
+          case "pas1" : sPas1 = e.target.value.trim();  break;
+          case "pas2" : sPas2 = e.target.value.trim();  break;
+        };
+        fnFormAnaliz();
+      };
+      //event
+      elLog.addEventListener("keyup",fnKeyUp);
+      elPas1.addEventListener("keyup",fnKeyUp);
+      elPas2.addEventListener("keyup",fnKeyUp);
+      elChecked.addEventListener('click',fnFormAnaliz);
+      elForm.addEventListener('submit', e => {
+        e.preventDefault();
+        console.log( 'log : ', sLog );
+        console.log( 'pas1 : ', sPas1 );
+        console.log( 'pas2 : ', sPas2 );
+      });
+      //go
+      fnFormAnaliz();
+  });
+  </script>
+</body>
+</html>
