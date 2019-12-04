@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>modal</title>
+</head>
+<body>
+    <div id="idTop">
+        <button id = "MyButton">MyButton</button>
+    </div>
+    <div id="myModal"> 
+        <form >
+            <h1>MyModalForm</h1>
+            <div><label for="idLog">Login</label>
+            <input type="text" name="nmLog" id="idLog" class="fTxt"><br>
+            </div><div><label for="idPas1">Password</label>
+            <input type="password" name="nmPas1" id="idPas1" class="fTxt"><br>
+            </div><div><label for="idPas2">Password replay</label>
+            <input type="password" name="nmPas2" id="idPas2" class="fTxt">
+            </div>
+            <div id = "idDivBtn">
+                <input type="submit" value="OK" id = "idOK">
+                <input type="button" value="Cancel" id = "idCancel">
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<script>
+window.addEventListener("load",() => {
+    const myModal = document.getElementById("myModal"),
+        idLog = document.getElementById("idLog"),
+        idPas1 = document.getElementById("idPas1"),
+        idPas2 = document.getElementById("idPas2");
+    //
+    const analizText = () => {
+        let bOK =true;
+        const strLog = idLog.value.trim(),
+        strPas1 = idPas1.value.trim(),
+        strPas2 = idPas2.value.trim();
+        if(strLog){
+            idLog.style.borderColor = "green";
+        }else{
+            idLog.style.borderColor = "red";   
+            bOK = false; 
+        } 
+        if((strPas1)&&(strPas2)&&(strPas1==strPas2)){
+            idPas1.style.borderColor = "green";
+            idPas2.style.borderColor = "green";
+        }else{
+            idPas1.style.borderColor = "red";
+            idPas2.style.borderColor = "red";
+            bOK = false; 
+        }
+        return bOK;
+        
+    };
+    idLog.addEventListener("keyup",analizText);
+    idPas1.addEventListener("keyup",analizText);
+    idPas2.addEventListener("keyup",analizText);
+    document.getElementById("MyButton").addEventListener("click",() => {
+        myModal.style.display = "block";
+    });
+    document.getElementById("idCancel").addEventListener("click",() => {
+        myModal.style.display = "none";
+    });
+    document.getElementById("idOK").addEventListener("click",e => {
+        e.preventDefault();
+        if(analizText())        
+            myModal.style.display = "none";
+    });
+    //go
+    analizText();
+    //
+    //end
+});
+</script>
+<style>
+div{
+    padding-top: 5px;
+}
+#idTop{
+    display: block;
+    background: darkgray;
+    width: 100%;
+    height: 100px;
+}
+#MyButton{
+    width: 200px;
+    height:50px;
+    margin-top: 25px;
+    margin-left: 25px;
+    font-weight: bold;
+    font-size: 25px;
+}
+#myModal {
+  display: none; /* Скрыто по умолчанию */
+  background-color: rgb(150, 163, 73); /* Затемнение фона */
+  z-index: 1; /* Фон на нижнем слое */
+  overflow: auto; /* При необходимости, то появиться прокрутка */
+  position:absolute;
+  left: 500px;
+  top: 200px;
+  width: 400px;
+  height:230px;
+}
+/* #idDivBtn{
+    display: block;
+    margin-top: 20px;
+}
+#idOK{
+    position:absolute;
+    left: 30px;
+    width: 150px;
+}
+#idCancel{
+    position:absolute;
+    left: 230px;
+    width: 150px;
+} */
+#idDivBtn{
+    display: flex;
+    justify-content:space-between;
+    height: 30px;
+    width: 95%;
+    position: absolute;
+    font-weight: bold; 
+    top: 85%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+ #idOK,#idCancel{ 
+    width: 200px;
+}
+.fTxt{
+    /* padding-top: 10px;
+    display: flex;
+    justify-content:space-between; */
+    position: absolute;
+    left: 130px;
+    width: 250px;
+}
+label{
+    /* padding-top: 5px; */
+    position: absolute;
+    left: 10px;
+} 
+
+h1{
+    width: 100%;
+    background: chartreuse;
+    text-align: center;
+}
+</style>

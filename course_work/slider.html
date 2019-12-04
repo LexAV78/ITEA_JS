@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="divSliderContainer"></div>
+    <div id="myModal"> 
+      <img src="" id="imgModal"></img>    
+    </div>
+</body>
+<script>
+window.addEventListener("load",() => {
+    const masSl = ["img/cat1.jpg",
+    "img/cat2.jpg","img/cat3.jpg",
+    "img/cat4.jpg","img/cat5.jpg",
+    "img/cat6.jpg","img/cat7.jpg"];
+//                                 Object "objSlider"
+    function objSlider (dMaster,mSlide) {
+      const divMaster = dMaster;
+      const masSlide = mSlide;
+      let divSize = divMaster.clientWidth;
+      const masLength = masSlide.length;
+      const divSlider = document.createElement("div");
+      divSlider.className = "divSlider";
+      const divBtn = document.createElement("div");
+      divBtn.className = "divButton";
+      let indexSlider = 1;
+      //
+      const fnSlideSetPosition = indx => {
+        divSlider.style.transform = "translateX("+(-indx*divSize)+"px)";
+        indexSlider = indx;
+      };
+      //
+      const fnSlideEnd = () => {
+        divSlider.addEventListener("transitionend",() => {
+          if(indexSlider == 0){
+            divSlider.style.transition = "none";
+            fnSlideSetPosition(masLength);
+          }
+          if(indexSlider == masLength+1){
+            divSlider.style.transition = "none";
+            fnSlideSetPosition(1);
+          }
+        });
+      };
+// ---- function    "fnSetPositionSlide"
+      const fnPositionSlideVerif = indx => {
+        divSlider.style.transition = "transform .6s ease-in-out";
+        indexSlider = indx;
+        if(indexSlider<0)indexSlider = 0;
+        if(indexSlider>masLength+1) indexSlider = masLength+1;
+        fnSlideSetPosition(indexSlider);
+      };
+// ---- function    "fnPositionSlide"
+      const fnPositionSlide = event => {
+        if(event.target.id  == "idNext")
+          fnPositionSlideVerif(++indexSlider);
+          else 
+          fnPositionSlideVerif(--indexSlider);
+      };
+// ---- function    "addImg"
+      const addImg = (item,leftImg) => {
+          const elImg = document.createElement("img");
+          //elImg.className = "slide";
+          elImg.setAttribute("src",item);
+          elImg.setAttribute("style","left : "+leftImg+"%");
+          divSlider.appendChild(elImg);
+          return leftImg+100;
+      };
+// ---- this.function    "render"
+      this.render = () => {
+        // btnPrev
+        const btnPrev = document.createElement("div");
+        btnPrev.id = "idPrev";
+        btnPrev.style.paddingTop = "2px";
+        btnPrev.style.background = "greenyellow";
+        btnPrev.style.borderRadius = "5px";
+        btnPrev.innerText = "<<";
+        btnPrev.className = "btnSlide";
+        btnPrev.addEventListener("click",e => fnPositionSlide(e));
+        btnPrev.addEventListener("mouseenter",e => e.target.style.cursor = "pointer");
+        // btnNext
+        const btnNext = document.createElement("div");
+        btnNext.id = "idNext";
+        btnNext.style.paddingTop = "2px";
+        btnNext.style.background = "greenyellow";
+        btnNext.style.borderRadius = "5px"
+        btnNext.innerText = ">>";
+        btnNext.className = "btnSlide";
+        btnNext.addEventListener("click",e => fnPositionSlide(e));
+        btnNext.addEventListener("mouseenter",e => e.target.style.cursor = "pointer");
+        // appendChild
+        divBtn.appendChild(btnPrev);
+        divBtn.appendChild(btnNext);
+        divMaster.innerHTML = "";
+        divMaster.appendChild(divSlider);
+        divMaster.appendChild(divBtn);
+
+      };
+// ---- this.function     "setWidthHeight"
+      this.setWidthHeight = (Width,Height) => {
+        // img
+        divSlider.innerHTML = "";
+        let leftImg = 0;
+        leftImg = addImg(masSlide[masLength-1],leftImg);
+        masSlide.forEach(item => {
+          leftImg = addImg(item,leftImg);
+        });
+        leftImg = addImg(masSlide[0],leftImg);
+        // img style
+        const vImg = divSlider.querySelectorAll("img");
+        vImg.forEach(item => {
+          item.style.width = Width+"px";
+          item.style.height = Height+"px";
+          item.style.position = "absolute";
+          item.style.top = "0";
+        });
+        //
+        divMaster.style.width = Width+"px";
+        divMaster.style.height = Height+"px";
+        divSize = Width;
+        divBtn.style.top =  (Math.floor(Height/2)-15)+"px"
+        fnSlideSetPosition(1);
+      };
+// ---- function    "setStarParam"
+      const setStarParam = () => {
+        //divMaster
+        divMaster.style.display = "block";
+        divMaster.style.margin = "0 auto";
+        divMaster.style.overflow = "hidden";
+        divMaster.style.position = "relative";
+        //divSlider
+        divSlider.style.width = "100%";
+        divSlider.style.height = "100%";
+        divSlider.style.position = "relative";
+        divSlider.style.left = "0";
+        divSlider.style.top = "0";
+        //divBtn
+        divBtn.style.display = "flex";
+        divBtn.style.justifyContent = "space-between";
+        divBtn.style.height = " 30px";
+        divBtn.style.width = "100%";
+        divBtn.style.position = "absolute";
+        divBtn.style.fontSize = "22px";
+        divBtn.style.fontWeight = "bold";
+        //
+        fnSlideEnd();
+        this.setWidthHeight(320,180);
+      };
+// ---- this.function     "getImage"
+      this.getImage = () => {
+        return masSlide[indexSlider-1];
+      };
+// ---- this.function     "setImageInterval"
+      this.setImageInterval = time => {
+        setInterval(() => fnPositionSlideVerif(++indexSlider), time);
+      };
+      setStarParam();
+      
+    };
+    const Slide1 = new objSlider(document.querySelector(".divSliderContainer"),masSl);
+    Slide1.setWidthHeight(640,360);;//размер слайдера
+    //Slide1.setImageInterval(4000);//авто перемещение слайдера
+    Slide1.render();
+    console.log(Slide1);
+
+    // модальное окно
+    const elModal = document.getElementById('myModal');
+    // двойной клик открытиме модального окна
+    document.querySelector(".divSliderContainer").addEventListener("dblclick",() => {
+      document.getElementById("imgModal").src = Slide1.getImage();
+      elModal.style.display = "block";    
+    });
+    // двойной клик закрытие модального окна
+    elModal.addEventListener("dblclick",() => elModal.style.display = "none");
+});
+</script>
+<style>
+#myModal {
+  display: none; 
+  overflow:hidden; 
+  position:absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+#imgModal{
+  width: 100%;
+  height: auto;
+}
+</style>
+</html>
